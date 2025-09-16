@@ -101,3 +101,15 @@ ORDER BY
     demand_count DESC, 
     average_salary DESC
 LIMIT 25;
+
+-- Results - 
+/*
+The results show the top 5 most in-demand skills being (from most to least), SQL, Excel, Python, Tableau and R, 
+each with their respective demand counts of 3083, 2143, 1840, 1659, and 1073. 
+The salary range is just over $15,000, with:
+Excel average salary = $86418.90
+Python average salary = $101511.85
+SQL with the highest demand also had a respectable average salary of $96435.33
+*/
+
+-- Different results can be seen if prioritising average salary over demand count.
