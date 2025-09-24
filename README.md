@@ -145,8 +145,113 @@ Here's a visualisation of the top 5 skills for data analyst roles in 2023:
 *Bar graph visualising my results for the top 5 data analyst roles in 2023; generated through ChatGPT from my SQL query results.*  
 
 ### 4. Skills Based on Salary  
+Next, I looked at the top skills based on the highest average salaries earned from each skill. Eventually, I filtered this down to specifically 'Data Analyst' roles. All roles that did not have a specified salary were removed, and any work location was valid. This section was important to identify how different skills impact salary levels and would allow me to utilise this data to learn which skills would be most beneficial to learn for a data analyst role. Used ROUND() function instead of COUNT() to remove decimal places in average salary from data, then rounded to 2 decimal places for a uniform style.
 
-### 5. Most Optimal Skills to Learn for a Data Analyst  
+```sql
+SELECT 
+    skills,
+    ROUND(AVG(salary_year_avg), 2) AS average_salary
+FROM 
+    job_postings_fact
+INNER JOIN 
+    skills_job_dim ON job_postings_fact.job_id = skills_job_dim.job_id
+INNER JOIN 
+    skills_dim ON skills_job_dim.skill_id = skills_dim.skill_id
+WHERE
+    job_title_short = 'Data Analyst'
+    AND salary_year_avg IS NOT NULL
+    -- AND job_work_from_home = TRUE
+GROUP BY
+    skills
+ORDER BY
+    average_salary DESC
+LIMIT 25
+```
+
+Here's a breakdown of the top 25 skills for data analyst roles in 2023, based on highest average salary:  
+
+- **Top Skills:** Skills like SVN had the highest average salary of $400,000, but this is likely due to being an extremely niche skill or anomalous data. The other top skills include (descending order), Solidity, Couchbase, Datarobot, and Golang which had average annual salaries ranging from $155,000 - $179,000. These are solid 6-figure skills experienced data analysts will know.
+- **Skill Types:** AI/ML framework skills (Hugging Face, PyTorch, TensorFlow, Keras, MXNet) are consistently high-paying, but not the very top. Blockchain (Solidity) stands out with exceptional pay, second to the SVN anomaly. Infrastructure automation & DevOps (Terraform, Ansible, Puppet, GitLab, VMware, Kafka, Airflow) make up a big portion of the high salaries. Legacy or niche tech (Perl, SVN) can command unusually high salaries because of scarcity of experts.
+
+Here's a visualisation of the top 25 skills for data analyst roles in 2023, based on highest average salary:  
+<img width="1979" height="1580" alt="Image" src="https://github.com/user-attachments/assets/e453420d-764f-4d19-84f2-eda031b0b12c" />  
+*Bar graph visualising my results for the top 25 data analyst role skills in 2023; generated through ChatGPT from my SQL query results.*
+
+### 5. Most Optimal Skills to Learn for a Data Analyst 
+Finally, I looked at the most optimal skills for a data analyst to learn. 'Optimal' translates to skills that are in high-demand (maintains job security) and high-paying (great financial benefit). This code concentrated on positions with specified salaries. CTEs were created with the code from queries 3 & 4 - 'skills_demand' + 'avg_salary'. CTEs combined to show optimal skills. 2 sections of code can be seen below, my original code & my code condensed by ChatGPT.  
+
+**Original Code:**
+```sql
+WITH skills_demand AS (
+SELECT 
+    skills_dim.skill_id,
+    skills_dim.skills,
+    COUNT(skills_job_dim.job_id) AS demand_count
+FROM 
+    job_postings_fact
+INNER JOIN 
+    skills_job_dim ON job_postings_fact.job_id = skills_job_dim.job_id
+INNER JOIN 
+    skills_dim ON skills_job_dim.skill_id = skills_dim.skill_id
+WHERE
+    job_title_short = 'Data Analyst'
+    AND salary_year_avg IS NOT NULL
+GROUP BY
+    skills_dim.skill_id
+), 
+
+avg_salary AS (
+SELECT 
+    skills_dim.skill_id,
+    skills_dim.skills,
+    ROUND(AVG(salary_year_avg), 2) AS average_salary
+FROM 
+    job_postings_fact
+INNER JOIN 
+    skills_job_dim ON job_postings_fact.job_id = skills_job_dim.job_id
+INNER JOIN 
+    skills_dim ON skills_job_dim.skill_id = skills_dim.skill_id
+WHERE
+    job_title_short = 'Data Analyst'
+    AND salary_year_avg IS NOT NULL
+    -- AND job_work_from_home = TRUE
+GROUP BY
+    skills_dim.skill_id
+)
+```
+
+**Condensed Code:**
+```sql
+SELECT 
+    s.skill_id,
+    s.skills,
+    COUNT(sj.job_id) AS demand_count,
+    ROUND(AVG(j.salary_year_avg), 2) AS average_salary
+FROM 
+    job_postings_fact j
+JOIN 
+    skills_job_dim sj ON j.job_id = sj.job_id
+JOIN 
+    skills_dim s ON sj.skill_id = s.skill_id
+WHERE
+    j.job_title_short = 'Data Analyst'
+    AND j.salary_year_avg IS NOT NULL
+GROUP BY
+    s.skill_id, s.skills
+ORDER BY
+    demand_count DESC, 
+    average_salary DESC
+LIMIT 25;
+```
+Here's a breakdown of the most optimal skills for data analyst roles in 2023: 
+
+- **Employability:** If my goal is employability, focus on SQL + Excel + Python + Tableau/Power BI.  
+- **Maximising Salary:** If my goal is maximising salary, pursue Spark, Snowflake, AWS, Azure, Looker.  
+- **The Smart Strategy:** Core skills (SQL, Python, BI) for demand + cloud/big data specialization for higher pay.
+
+Here's a visualisation of the most optimal skills for data analyst roles in 2023:  
+<img width="1980" height="1380" alt="Image" src="https://github.com/user-attachments/assets/0d7754c3-a4c7-4858-8f82-e4868856fdfa" />  
+*Scatter plot visualising my results for the most optimal data analyst skills in 2023; generated through ChatGPT from my SQL query results.*  
 
 ## What I Learned From This Project:   
 This project allowed me to learn the basics of using SQL as a language as well as the use of a database management system in PostgreSQL and a query/code editor like Visual Code Studio.  
@@ -154,3 +259,4 @@ This project allowed me to learn the basics of using SQL as a language as well a
 - **Creating Complex Queries:** Mastered the basics and advanced SQL from merging tables with JOIN clauses to using WITH statements to create temporary tables when necessary.
 - **Data Aggregation:** Became familiar with aggregate functions like GROUP BY, COUNT(), and AVG() to help summarise my data to exactly how I saw fit. Also used clauses like WHERE, ORDER BY, and GROUP BY for a more filtered and streamlined result search. 
 - **Analytical Approach:** Improved my problem-solving and analytical skills, by transforming questions into SQL queries, which gave me actionable, defined results for a specific job title like Data Analyst.
+-  **AI Chats Usage:** Using AI chats like ChatGPT can be useful at the start of my coding journey to condense code, create temporary/quick charts & graphs as well as gain general insights from my code.
