@@ -254,7 +254,7 @@ Here's a visualisation of the most optimal skills for data analyst roles in 2023
 *Scatter plot visualising my results for the most optimal data analyst skills in 2023; generated through ChatGPT from my SQL query results.*  
 
 ## What I Learned From This Project:   
-This project allowed me to learn the basics of using SQL as a language as well as the use of a database management system in PostgreSQL and a query/code editor like Visual Code Studio.  
+This project allowed me to learn the basics of using SQL as a language as well as the use of a database management system in PostgreSQL and a query/code editor like Visual Code Studio. Not included in this project, but I was also able to get some experience with using SQLite, another simple query/code editor for SQL. 
 
 - **Creating Complex Queries:** Mastered the basics and advanced SQL from merging tables with JOIN clauses to using WITH statements to create temporary tables when necessary.
 - **Data Aggregation:** Became familiar with aggregate functions like GROUP BY, COUNT(), and AVG() to help summarise my data to exactly how I saw fit. Also used clauses like WHERE, ORDER BY, and GROUP BY for a more filtered and streamlined result search. 
